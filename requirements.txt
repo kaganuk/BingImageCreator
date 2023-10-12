@@ -1,3 +1,4 @@
 aiohttp
 regex
 requests
+python-slugify

@@ -10,6 +10,7 @@ from functools import partial
 from typing import Dict
 from typing import List
 from typing import Union
+from slugify import slugify
 
 import httpx
 import pkg_resources
@@ -208,7 +209,7 @@ class ImageGen:
         with contextlib.suppress(FileExistsError):
             os.mkdir(output_dir)
         try:
-            fn = f"{file_name}_" if file_name else ""
+            fn = f"{file_name}-" if file_name else ""
             jpeg_index = 0
 
             if download_count:
@@ -492,6 +493,7 @@ def main():
             image_generator.get_images(args.prompt),
             output_dir=args.output_dir,
             download_count=args.download_count,
+            file_name=slugify(args.prompt),
         )
     else:
         asyncio.run(
