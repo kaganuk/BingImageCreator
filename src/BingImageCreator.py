@@ -70,12 +70,12 @@ class ImageGen:
     """
 
     def __init__(
-        self,
-        auth_cookie: str,
-        auth_cookie_SRCHHPGUSR: str,
-        debug_file: Union[str, None] = None,
-        quiet: bool = False,
-        all_cookies: List[Dict] = None,
+            self,
+            auth_cookie: str,
+            auth_cookie_SRCHHPGUSR: str,
+            debug_file: Union[str, None] = None,
+            quiet: bool = False,
+            all_cookies: List[Dict] = None,
     ) -> None:
         self.session: requests.Session = requests.Session()
         self.session.headers = HEADERS
@@ -188,11 +188,11 @@ class ImageGen:
         return normal_image_links
 
     def save_images(
-        self,
-        links: list,
-        output_dir: str,
-        file_name: str = None,
-        download_count: int = None,
+            self,
+            links: list,
+            output_dir: str,
+            file_name: str = None,
+            download_count: int = None,
     ) -> None:
         """
         Saves images to output directory
@@ -217,7 +217,7 @@ class ImageGen:
 
             for link in links:
                 while os.path.exists(
-                    os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg")
+                        os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg")
                 ):
                     jpeg_index += 1
                 response = self.session.get(link)
@@ -225,7 +225,7 @@ class ImageGen:
                     raise Exception("Could not download image")
                 # save response to file
                 with open(
-                    os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg"), "wb"
+                        os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg"), "wb"
                 ) as output_file:
                     output_file.write(response.content)
                 jpeg_index += 1
@@ -248,11 +248,11 @@ class ImageGenAsync:
     """
 
     def __init__(
-        self,
-        auth_cookie: str = None,
-        debug_file: Union[str, None] = None,
-        quiet: bool = False,
-        all_cookies: List[Dict] = None,
+            self,
+            auth_cookie: str = None,
+            debug_file: Union[str, None] = None,
+            quiet: bool = False,
+            all_cookies: List[Dict] = None,
     ) -> None:
         if auth_cookie is None and not all_cookies:
             raise Exception("No auth cookie provided")
@@ -354,11 +354,11 @@ class ImageGenAsync:
         return normal_image_links
 
     async def save_images(
-        self,
-        links: list,
-        output_dir: str,
-        download_count: int,
-        file_name: str = None,
+            self,
+            links: list,
+            output_dir: str,
+            download_count: int,
+            file_name: str = None,
     ) -> None:
         """
         Saves images to output directory
@@ -376,7 +376,7 @@ class ImageGenAsync:
 
             for link in links[:download_count]:
                 while os.path.exists(
-                    os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg")
+                        os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg")
                 ):
                     jpeg_index += 1
                 response = await self.session.get(link)
@@ -384,7 +384,7 @@ class ImageGenAsync:
                     raise Exception("Could not download image")
                 # save response to file
                 with open(
-                    os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg"), "wb"
+                        os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg"), "wb"
                 ) as output_file:
                     output_file.write(response.content)
                 jpeg_index += 1
@@ -395,19 +395,19 @@ class ImageGenAsync:
 
 
 async def async_image_gen(
-    prompt: str,
-    download_count: int,
-    output_dir: str,
-    u_cookie=None,
-    debug_file=None,
-    quiet=False,
-    all_cookies=None,
+        prompt: str,
+        download_count: int,
+        output_dir: str,
+        u_cookie=None,
+        debug_file=None,
+        quiet=False,
+        all_cookies=None,
 ):
     async with ImageGenAsync(
-        u_cookie,
-        debug_file=debug_file,
-        quiet=quiet,
-        all_cookies=all_cookies,
+            u_cookie,
+            debug_file=debug_file,
+            quiet=quiet,
+            all_cookies=all_cookies,
     ) as image_generator:
         images = await image_generator.get_images(prompt)
         await image_generator.save_images(
@@ -482,19 +482,251 @@ def main():
         raise Exception("The number of downloads must be less than five")
 
     if not args.asyncio:
-        # Create image generator
-        image_generator = ImageGen(
-            args.U,
-            args.debug_file,
-            args.quiet,
-            all_cookies=cookie_json,
-        )
-        image_generator.save_images(
-            image_generator.get_images(args.prompt),
-            output_dir=args.output_dir,
-            download_count=args.download_count,
-            file_name=slugify(args.prompt),
-        )
+        prompt_list = ["Tattoo with a Wolf, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Wolf, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Lion, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Eagle, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Snake, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Owl, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Elephant, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Butterfly, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Tiger, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Gorilla, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Cat, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Dog, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Phoenix, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Dragon, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Koi Fish, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Horse, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Hummingbird, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Panther, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Bear, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Fox, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Deer, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Turtle, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Lizard, Dotwork Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Realism Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Neo-Traditional Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Watercolor Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Blackwork Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Tribal Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Japanese Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Geometric Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Trash Polka Style, high quality, on body, small size",
+                       "Tattoo with a Dolphin, Dotwork Style, high quality, on body, small size"]
+
+        for prompt in prompt_list:
+            # Create image generator
+            image_generator = ImageGen(
+                args.U,
+                args.debug_file,
+                args.quiet,
+                all_cookies=cookie_json,
+            )
+            image_generator.save_images(
+                image_generator.get_images(prompt),
+                output_dir=args.output_dir,
+                download_count=args.download_count,
+                file_name=slugify(prompt),
+            )
     else:
         asyncio.run(
             async_image_gen(
