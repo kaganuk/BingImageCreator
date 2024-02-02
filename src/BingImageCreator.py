@@ -185,6 +185,8 @@ class ImageGen:
         # No images
         if not normal_image_links:
             raise Exception(error_no_images)
+
+        normal_image_links.remove("https://r.bing.com/rp/gmZtdJVd-klWl3XWpa6-ni1FU3M.svg")
         return normal_image_links
 
     def save_images(
@@ -220,9 +222,15 @@ class ImageGen:
                         os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg")
                 ):
                     jpeg_index += 1
-                response = self.session.get(link)
-                if response.status_code != 200:
-                    raise Exception("Could not download image")
+                for i in range(0, 100):
+                    while True:
+                        try:
+                            response = self.session.get(link)
+                        except Exception:
+                            continue
+                        break
+                if response.status_code != 200 or sys.getsizeof(response.content) < 5000:
+                    raise Exception("Could not download image: " + link)
                 # save response to file
                 with open(
                         os.path.join(output_dir, f"{fn}{jpeg_index}.jpeg"), "wb"
@@ -993,20 +1001,26 @@ def main():
                        "Tattoo with a Joker, Trash Polka Style, High Quality, On Body, Small Size",
                        "Tattoo with a Joker, Dotwork Style, High Quality, On Body, Small Size"]
 
+        image_generator = ImageGen(
+            args.U,
+            args.debug_file,
+            args.quiet,
+            all_cookies=cookie_json,
+        )
+
+#        random.shuffle(prompt_list)
         for prompt in prompt_list:
-            # Create image generator
-            image_generator = ImageGen(
-                args.U,
-                args.debug_file,
-                args.quiet,
-                all_cookies=cookie_json,
-            )
-            image_generator.save_images(
-                image_generator.get_images(prompt),
-                output_dir=args.output_dir,
-                download_count=args.download_count,
-                file_name=slugify(prompt),
-            )
+            time.sleep(random.uniform(1.5, 7))
+            print("start: " + prompt)
+            try:
+                image_generator.save_images(
+                    image_generator.get_images(prompt),
+                    output_dir=args.output_dir,
+                    download_count=args.download_count,
+                    file_name=slugify(prompt),
+                )
+            except Exception as e:
+                print("error: " + prompt)
     else:
         asyncio.run(
             async_image_gen(
